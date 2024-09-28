@@ -6,13 +6,13 @@ class NeuralNetwork(nn.Module):
     def __init__(self):
         super().__init__()
         # 3 input channels (RGB), 12 output channels, 5x5 convolution kernel
-        self.conv1 = nn.Conv2d(3, 15, 5)
+        self.conv1 = nn.Conv2d(3, 30, 5)
         
         # 12 input channels, 20 output channels, 5x5 convolution kernel
-        self.conv2 = nn.Conv2d(15, 30, 5)
+        self.conv2 = nn.Conv2d(30, 40, 5)
 
         # Fully connected layer, expects input size of 20 * 8 * 8 (after convolutions and pooling)
-        self.fc1 = nn.Linear(30 * 8 * 8, 1024)  # 1280 neurons as input
+        self.fc1 = nn.Linear(40 * 8 * 8, 1024)  # 1280 neurons as input
         self.fc2 = nn.Linear(1024, 800)  # 1024 neurons as input
         self.fc3 = nn.Linear(800, 400)  # 1000 neurons as input
         self.fc4 = nn.Linear(400, 200)  # 500 neurons as input

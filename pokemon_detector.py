@@ -57,12 +57,12 @@ def setup():
                'Rhydon', 'Starmie', 'Charmeleon', 'Lapras', 'Alakazam', 'Graveler', 'Psyduck', 'Rapidash', 
                'Doduo', 'Magneton', 'Arcanine', 'Electrode', 'Omanyte', 'Poliwhirl', 'Mew', 
                'Alolan Sandslash', 'Mewtwo', 'Weezing', 'Gastly', 'Victreebel', 'Ivysaur', 'MrMime', 
-               'Shellder', 'Scyther', 'Diglett', 'Primeape', 'Raichu')\
+               'Shellder', 'Scyther', 'Diglett', 'Primeape', 'Raichu')
     
     neural = NeuralNetwork()
 
-    if os.path.exists('./pkmn_net.pth'):
-        neural.load_state_dict(torch.load('./pkmn_net.pth'))
+    if os.path.exists('./model/pkmn_net.pth'):
+        neural.load_state_dict(torch.load('./model/pkmn_net.pth'))
     else:
         criterion = nn.CrossEntropyLoss()
         optimizer = optim.SGD(neural.parameters(), lr=0.001, momentum=0.9)
@@ -73,6 +73,7 @@ def setup():
         for epoch in range(10):  # Loop over the dataset multiple times
             running_loss = 0.0
             for i, (inputs, labels) in enumerate(trainLoader):
+                print(i)
                 # Zero the parameter gradients
                 optimizer.zero_grad()
 
@@ -89,10 +90,20 @@ def setup():
                     running_loss = 0.0
 
         print('Finished Training')
-        PATH = './pkmn_net.pth'
+        PATH = './model/pkmn_net.pth'
         torch.save(neural.state_dict(), PATH)
 
     dataiter = iter(testLoader)
+    next(dataiter)
+    
+    next(dataiter)
+    next(dataiter)
+    next(dataiter)
+    next(dataiter)
+    next(dataiter)
+    next(dataiter)
+    
+    next(dataiter)
     images, labels = next(dataiter)
 
     imshow(torchvision.utils.make_grid(images))
@@ -102,7 +113,6 @@ def setup():
     _, predicted = torch.max(outputs, 1)
 
 
-    imshow(torchvision.utils.make_grid(outputs))
     print('Predicted: ', ' '.join(f'{classes[predicted[j]]:5s}'
                                 for j in range(4)))
 
