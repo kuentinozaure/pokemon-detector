@@ -16,6 +16,22 @@ def imshow(img):
     plt.imshow(np.transpose(npimg, (1, 2, 0)))
     plt.show()
 
+def calculate_accuracy(model, test_loader, device):
+    model.eval()  # Set the model to evaluation mode
+    correct = 0
+    total = 0
+
+    with torch.no_grad():  # Disable gradient calculation
+        for images, labels in test_loader:
+            images, labels = images.to(device), labels.to(device)
+            outputs = model(images)
+            _, predicted = torch.max(outputs, 1)  # Get predicted class indices
+
+            total += labels.size(0)  # Total number of samples
+            correct += (predicted == labels).sum().item()  # Count correct predictions
+
+    accuracy = (correct / total) * 100  # Convert to percentage
+    return accuracy
 
 def setup(): 
     # Load the dataset from Hugging Face
@@ -70,7 +86,7 @@ def setup():
         print('Starting Training')
         print('=================')
     
-        for epoch in range(10):  # Loop over the dataset multiple times
+        for epoch in range(20):  # Loop over the dataset multiple times
             running_loss = 0.0
             for i, (inputs, labels) in enumerate(trainLoader):
                 print(i)
@@ -93,28 +109,34 @@ def setup():
         PATH = './model/pkmn_net.pth'
         torch.save(neural.state_dict(), PATH)
 
-    dataiter = iter(testLoader)
-    next(dataiter)
+    # dataiter = iter(testLoader)
+    # next(dataiter)
     
-    next(dataiter)
-    next(dataiter)
-    next(dataiter)
-    next(dataiter)
-    next(dataiter)
-    next(dataiter)
+    # next(dataiter)
+    # next(dataiter)
+    # next(dataiter)
+    # next(dataiter)
+    # next(dataiter)
+    # next(dataiter)
     
-    next(dataiter)
-    images, labels = next(dataiter)
+    # next(dataiter)
+    # images, labels = next(dataiter)
 
-    imshow(torchvision.utils.make_grid(images))
-    print('GroundTruth: ', ' '.join(f'{classes[labels[j]]:5s}' for j in range(4)))
+    # imshow(torchvision.utils.make_grid(images))
+    # print('GroundTruth: ', ' '.join(f'{classes[labels[j]]:5s}' for j in range(4)))
 
-    outputs = neural(images)
-    _, predicted = torch.max(outputs, 1)
+    # outputs = neural(images)
+    # _, predicted = torch.max(outputs, 1)
 
 
-    print('Predicted: ', ' '.join(f'{classes[predicted[j]]:5s}'
-                                for j in range(4)))
+    # print('Predicted: ', ' '.join(f'{classes[predicted[j]]:5s}'
+    #                             for j in range(4)))
+    neural.eval()  # Mettre le modèle en mode évaluation
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    neural.to(device)
+    
+    accuracy = calculate_accuracy(neural, testLoader, device)
+    print(f'Accuracy on the test set: {accuracy:.2f}%')  # Print as percentage
 
 if __name__ == '__main__':
     setup()
