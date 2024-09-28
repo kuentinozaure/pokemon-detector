@@ -89,7 +89,6 @@ def setup():
         for epoch in range(20):  # Loop over the dataset multiple times
             running_loss = 0.0
             for i, (inputs, labels) in enumerate(trainLoader):
-                print(i)
                 # Zero the parameter gradients
                 optimizer.zero_grad()
 
@@ -101,8 +100,8 @@ def setup():
 
                 # Print statistics
                 running_loss += loss.item()
-                if i % 2000 == 1999:  # Print every 2000 mini-batches
-                    print(f'[{epoch + 1}, {i + 1:5d}] loss: {running_loss / 2000:.3f}')
+                if i % 1217 == 1216:  # Print every 2000 mini-batches
+                    print(f'[{epoch + 1}, {i + 1:5d}] loss: {running_loss / 1217:.3f}')
                     running_loss = 0.0
 
         print('Finished Training')
